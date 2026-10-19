@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeeves — Propuesta · Cognitivity</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-pale: #FDF3D7;
+      --dark: #0A0A0A;
+      --dark2: #141414;
+      --dark3: #1E1E1E;
+      --dark4: #2A2A2A;
+      --gray: #6B7280;
+      --gray-light: #9CA3AF;
+      --white: #FFFFFF;
+      --off-white: #F9F9F7;
+      --border: rgba(255,255,255,0.08);
+      --usdc: #2775CA;
+      --usdt: #26A17B;
+      --kd-blue: #2E6BFF;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+      background: var(--off-white);
+      color: #111;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.025em; }
+    h3 { font-size: 1.25rem; font-weight: 700; }
+    h4 { font-size: 1rem; font-weight: 600; }
+    p { color: #444; }
+    em { font-style: normal; color: var(--gold); }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #E5E7EB;
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 1rem; }
+    .nav-brand .jeeves-logo {
+      font-size: 1.3rem; font-weight: 900; letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #0A0A0A 0%, #444 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-divider { width: 1px; height: 24px; background: #D1D5DB; }
+    .nav-client { font-size: 0.85rem; font-weight: 700; color: var(--kd-blue); letter-spacing: 0.02em; }
+    .nav-links { display: flex; gap: 0.5rem; }
+    .nav-links a {
+      font-size: 0.8rem; font-weight: 500; color: #555;
+      text-decoration: none; padding: 0.4rem 0.75rem;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-links a:hover { background: #F3F4F6; color: #111; }
+    .nav-cta {
+      background: var(--dark); color: var(--white);
+      font-size: 0.82rem; font-weight: 600;
+      padding: 0.5rem 1.1rem; border-radius: 8px;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #333; }
+
+    /* ── Section Wrapper ── */
+    .section { padding: 6rem 2rem; }
+    .section.dark { background: var(--dark); color: var(--white); }
+    .section.dark p { color: var(--gray-light); }
+    .section.dark-alt { background: var(--dark2); color: var(--white); }
+    .section.dark-alt p { color: var(--gray-light); }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      background: rgba(201,168,76,0.12); color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 0.35rem 0.85rem; border-radius: 999px; margin-bottom: 1.25rem;
+    }
+    .section-badge.light { background: rgba(201,168,76,0.08); }
+
+    /* ── Hero ── */
+    #sec-hero {
+      background: var(--dark);
+      padding: 6rem 2rem 5rem;
+      color: var(--white);
+      position: relative; overflow: hidden;
+    }
+    #sec-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(201,168,76,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .hero-title { color: var(--white); margin-bottom: 1.25rem; }
+    .hero-title em { color: var(--gold); }
+    .hero-subtitle { font-size: 1.1rem; color: #9CA3AF; margin-bottom: 2.5rem; line-height: 1.7; }
+    .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .hero-stat { text-align: left; }
+    .hero-stat .num { font-size: 2rem; font-weight: 900; color: var(--gold); letter-spacing: -0.03em; }
+    .hero-stat .lbl { font-size: 0.75rem; color: #6B7280; font-weight: 500; margin-top: 0.15rem; }
+    .hero-cta-group { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--dark);
+      font-weight: 700; font-size: 0.9rem;
+      padding: 0.85rem 1.8rem; border-radius: 10px;
+      text-decoration: none; transition: all 0.2s;
+      display: inline-block; letter-spacing: -0.01em;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-ghost {
+      color: var(--gray-light); font-weight: 500; font-size: 0.9rem;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+
+    /* Card visual — Jeeves Elite */
+    .hero-visual { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+    .jcard {
+      width: 100%; max-width: 470px; aspect-ratio: 1.586;
+      border-radius: 24px; padding: 1.9rem 2.1rem;
+      background: linear-gradient(125deg, #0D0D0D 0%, #1B1B1B 48%, #2B2412 100%);
+      border: 1px solid rgba(201,168,76,0.35);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transform: rotate(-2.5deg);
+    }
+    .jcard::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 70% at 82% 12%, rgba(201,168,76,0.22) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .jcard::after {
+      content: '';
+      position: absolute; top: -60%; left: -20%;
+      width: 55%; height: 220%;
+      background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.045) 45%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.045) 55%, transparent 100%);
+      transform: rotate(12deg);
+      pointer-events: none;
+    }
+    .jcard-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .jcard-logo { font-size: 1.45rem; font-weight: 900; letter-spacing: -0.04em; color: var(--white); }
+    .jcard-elite {
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase;
+      background: linear-gradient(135deg, var(--gold) 0%, #E8C96A 55%, #A9863A 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      border: 1px solid rgba(201,168,76,0.45);
+      padding: 0.32rem 0.8rem; border-radius: 999px;
+    }
+    .jcard-mid { display: flex; align-items: center; gap: 1rem; }
+    .jcard-chip {
+      width: 48px; height: 36px; border-radius: 7px;
+      background: linear-gradient(135deg, #E8C96A 0%, #C9A84C 45%, #9A7B32 100%);
+      position: relative; flex-shrink: 0;
+    }
+    .jcard-chip::before {
+      content: '';
+      position: absolute; inset: 6px;
+      border: 1px solid rgba(60,45,10,0.55); border-radius: 4px;
+    }
+    .jcard-chip::after {
+      content: '';
+      position: absolute; top: 50%; left: 0; right: 0; height: 1px;
+      background: rgba(60,45,10,0.55);
+    }
+    .jcard-wave { font-size: 1.2rem; color: rgba(255,255,255,0.55); transform: rotate(90deg); }
+    .jcard-number {
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-weight: 600; color: #E5E7EB;
+      letter-spacing: 0.14em; font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .jcard-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .jcard-holder .lbl, .jcard-exp .lbl {
+      font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: #6B7280; margin-bottom: 0.2rem;
+    }
+    .jcard-holder .val { font-size: 0.95rem; font-weight: 700; color: var(--white); letter-spacing: 0.08em; text-transform: uppercase; }
+    .jcard-exp .val { font-size: 0.85rem; font-weight: 600; color: #D1D5DB; letter-spacing: 0.08em; }
+    .jcard-company { font-size: 0.95rem; font-weight: 800; letter-spacing: 0.06em; color: var(--gold); }
+    .jcard-caption { font-size: 0.78rem; color: #6B7280; text-align: center; }
+    .jcard-caption strong { color: var(--gold); font-weight: 700; }
+
+    /* ── Grid Layouts ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+
+    /* ── Feature Cards ── */
+    .feat-card {
+      background: var(--dark3); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem;
+    }
+    .feat-card-light {
+      background: var(--white); border: 1px solid #E5E7EB;
+      border-radius: var(--radius); padding: 1.75rem;
+    }
+    .feat-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .feat-card h4 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .feat-card p { font-size: 0.85rem; line-height: 1.65; }
+    .feat-card-light h4 { font-size: 1rem; font-weight: 700; color: #111; margin-bottom: 0.5rem; }
+    .feat-card-light p { font-size: 0.85rem; line-height: 1.65; color: #555; }
+
+    /* ── Section Header ── */
+    .sec-header { margin-bottom: 3rem; }
+    .sec-header h2 em { color: var(--gold); }
+    .sec-header p { font-size: 1.05rem; margin-top: 0.75rem; max-width: 640px; }
+    .sec-header.center { text-align: center; }
+    .sec-header.center p { margin-left: auto; margin-right: auto; }
+
+    /* ── Comparison Table ── */
+    .compare-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+    .compare-table th {
+      padding: 1rem 1.25rem; text-align: left;
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+      color: #9CA3AF; border-bottom: 1px solid var(--border);
+    }
+    .compare-table th:not(:first-child) { text-align: center; }
+    .compare-table td {
+      padding: 1rem 1.25rem; font-size: 0.88rem; color: #D1D5DB;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+    .compare-table td:not(:first-child) { text-align: center; }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .compare-table .col-jeeves { background: rgba(201,168,76,0.06); }
+    .compare-table th.col-jeeves { color: var(--gold); }
+    .check { color: #34D399; font-size: 1.1rem; }
+    .cross { color: #F87171; font-size: 1.1rem; }
+    .neutral { color: #9CA3AF; }
+
+    /* ── Calculator ── */
+    .calc-wrapper {
+      background: var(--white); border-radius: 20px;
+      border: 1px solid #E5E7EB; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .calc-header {
+      background: var(--dark); padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .calc-header h3 { color: var(--white); font-size: 1rem; }
+    .calc-header .badge {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+      background: rgba(201,168,76,0.2); color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 0.25rem 0.65rem; border-radius: 999px;
+    }
+    .calc-body { padding: 2rem; }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .calc-section-title {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 1px solid #E5E7EB;
+    }
+    .calc-field { margin-bottom: 1.25rem; }
+    .calc-field label { font-size: 0.82rem; font-weight: 600; color: #374151; display: block; margin-bottom: 0.4rem; }
+    .calc-field .hint { font-size: 0.72rem; color: var(--gray); margin-top: 0.25rem; }
+    .calc-input-wrap { position: relative; }
+    .calc-input-wrap .prefix {
+      position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+      font-size: 0.85rem; font-weight: 600; color: var(--gray);
+    }
+    .calc-input-wrap .suffix {
+      position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+      font-size: 0.75rem; color: var(--gray);
+    }
+    input[type="number"], input[type="text"], select {
+      width: 100%; padding: 0.65rem 0.9rem;
+      border: 1.5px solid #E5E7EB; border-radius: 8px;
+      font-size: 0.9rem; font-family: inherit;
+      background: #FAFAFA; color: #111;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus, select:focus { outline: none; border-color: var(--gold); background: #fff; }
+    .has-prefix input { padding-left: 2rem; }
+    .has-suffix input { padding-right: 3.5rem; }
+    .editable { background: #FFFBEF !important; border-color: #E8C96A !important; }
+
+    .calc-results {
+      background: var(--dark); border-radius: 14px;
+      padding: 1.75rem; margin-top: 1.5rem;
+    }
+    .calc-results h4 { color: var(--white); margin-bottom: 1.25rem; font-size: 0.95rem; }
+    .result-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.82rem; color: #9CA3AF; }
+    .result-value { font-size: 0.9rem; font-weight: 700; color: var(--white); }
+    .result-row.highlight { background: rgba(201,168,76,0.08); margin: 0 -1rem; padding: 0.75rem 1rem; border-radius: 8px; }
+    .result-row.highlight .result-label { color: var(--gold); font-weight: 600; }
+    .result-row.highlight .result-value { color: var(--gold); font-size: 1.05rem; }
+    .result-row.total { padding-top: 1rem; margin-top: 0.5rem; }
+    .result-row.total .result-label { color: var(--white); font-weight: 700; font-size: 0.9rem; }
+    .result-row.total .result-value { font-size: 1.3rem; color: var(--gold); }
+
+    /* ── Timeline / Flow ── */
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+    .flow::before {
+      content: '';
+      position: absolute; top: 28px; left: 12.5%; right: 12.5%;
+      height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    }
+    .flow-step { text-align: center; padding: 0 1rem; }
+    .flow-dot {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--dark3); border: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem; font-size: 1.4rem; position: relative; z-index: 1;
+    }
+    .flow-step h4 { font-size: 0.88rem; color: var(--white); margin-bottom: 0.4rem; }
+    .flow-step p { font-size: 0.78rem; color: #6B7280; }
+    .flow-time { font-size: 0.7rem; color: var(--gold); font-weight: 700; margin-top: 0.4rem; }
+
+    /* ── CTA Section ── */
+    #sec-cta { background: var(--dark); padding: 6rem 2rem; }
+    .cta-card {
+      background: linear-gradient(135deg, #1A1A1A 0%, #222 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 24px; padding: 4rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 70%);
+    }
+    .cta-card h2 { color: var(--white); position: relative; z-index: 1; }
+    .cta-card p { color: #9CA3AF; font-size: 1.05rem; margin-top: 0.75rem; position: relative; z-index: 1; }
+    .contact-card {
+      display: inline-flex; align-items: center; gap: 1.5rem;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 1.5rem 2.5rem;
+      margin-top: 2.5rem; position: relative; z-index: 1;
+    }
+    .contact-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, #E8A84C 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 900; color: var(--dark);
+    }
+    .contact-info { text-align: left; }
+    .contact-info .name { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .contact-info .role { font-size: 0.8rem; color: #9CA3AF; margin-top: 0.1rem; }
+    .contact-info .email { font-size: 0.82rem; color: var(--gold); margin-top: 0.4rem; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; margin-top: 1.75rem; position: relative; z-index: 1; }
+
+    /* ── Highlight Banner ── */
+    .banner {
+      background: linear-gradient(90deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.04) 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius); padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .banner-icon { font-size: 2rem; }
+    .banner-text h4 { color: #111; margin-bottom: 0.25rem; }
+    .banner-text p { font-size: 0.85rem; color: #555; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--dark); border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem; text-align: center;
+    }
+    footer p { font-size: 0.78rem; color: #6B7280; }
+    footer strong { color: #9CA3AF; }
+
+    /* ── Utilities ── */
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mt-4 { margin-top: 2rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; }
+    .text-gold { color: var(--gold); }
+    .text-sm { font-size: 0.82rem; }
+    .text-xs { font-size: 0.72rem; }
+    .font-bold { font-weight: 700; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero-grid, .grid-2, .calc-grid { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .grid-4 { grid-template-columns: 1fr 1fr; }
+      .flow { grid-template-columns: 1fr 1fr; }
+      .flow::before { display: none; }
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+    }
+
+    /* ── Extras Cognitivity ── */
+    .rails { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .rail {
+      font-size: 0.78rem; font-weight: 600; padding: 0.45rem 0.9rem; border-radius: 999px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #E5E7EB;
+    }
+    .rail strong { color: var(--gold); margin-right: 0.3rem; }
+    .approval { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    .approval-step { background: rgba(255,255,255,0.04); border: 1px solid #222; border-radius: 12px; padding: 1rem 1.1rem; }
+    .approval-step .who { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #6B7280; }
+    .approval-step .what { font-size: 0.9rem; font-weight: 700; color: #fff; margin-top: 0.3rem; }
+    .approval-step .st { font-size: 0.75rem; font-weight: 700; margin-top: 0.5rem; }
+    .checklist { list-style: none; margin-top: 1rem; }
+    .checklist li { font-size: 0.86rem; color: #374151; padding: 0.55rem 0; border-bottom: 1px solid #E5E7EB; display: flex; gap: 0.6rem; }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li span { color: var(--gold); font-weight: 800; }
+    .cb-status { font-size: 0.8rem; font-weight: 700; margin-top: 0.5rem; }
+    @media (max-width: 768px) { .approval { grid-template-columns: 1fr; } .cta-card { padding: 2.5rem 1.25rem; } .contact-card { flex-direction: column; padding: 1.25rem; } }
+    .stat-block { text-align:center; padding:2rem 1.5rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:var(--radius); }
+    .stat-block .big { font-size:2.4rem; font-weight:900; color:var(--gold); letter-spacing:-0.04em; }
+    .stat-block .sm { font-size:0.8rem; color:#9CA3AF; margin-top:0.35rem; }
+    .logo-group { margin-top:2.5rem; }
+    .logo-title { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#6B7280; text-align:center; margin-bottom:1rem; }
+    .logo-strip { display:flex; flex-wrap:wrap; justify-content:center; gap:0.75rem; }
+    .logo-strip span { font-size:0.95rem; font-weight:800; letter-spacing:-0.01em; color:#E5E7EB; padding:0.7rem 1.2rem; border:1px solid rgba(255,255,255,0.08); border-radius:10px; background:rgba(255,255,255,0.03); }
+    .logo-strip span.more { color:#6B7280; font-weight:600; border-style:dashed; }
+    .benefit { display:flex; gap:0.9rem; padding:0.85rem 0; border-bottom:1px solid #E5E7EB; }
+    .benefit:last-child { border-bottom:none; }
+    .benefit .b-icon { font-size:1.4rem; flex-shrink:0; width:2rem; text-align:center; }
+    .benefit h4 { font-size:0.92rem; color:#111; }
+    .benefit p { font-size:0.82rem; color:#555; margin-top:0.15rem; }
+    .benefit s { color:#9CA3AF; margin-right:0.4rem; }
+    .benefit .free { color:#15803D; }
+    .months { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; margin-bottom:0.5rem; }
+    .month label { font-size:0.75rem; font-weight:700; color:#374151; display:block; margin-bottom:0.35rem; }
+    .m-st { font-size:0.72rem; font-weight:700; margin-top:0.35rem; }
+    @media (max-width: 768px) { .months { grid-template-columns:1fr; } }
+    .deadline { display:flex; align-items:center; gap:1.25rem; background:var(--dark); border:1px solid rgba(201,168,76,0.45); border-radius:var(--radius); padding:1.25rem 1.5rem; margin-bottom:0.75rem; }
+    .dl-icon { font-size:2rem; }
+    .dl-items { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; flex:1; }
+    .dl-k { font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9CA3AF; }
+    .dl-v { font-size:0.95rem; font-weight:800; color:var(--gold); margin-top:0.2rem; line-height:1.3; }
+    .dl-note { font-size:0.8rem; color:#8A6D2B; text-align:center; margin-bottom:1.75rem; font-weight:600; }
+    @media (max-width: 768px) { .deadline { flex-direction:column; align-items:flex-start; } .dl-items { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+<nav>
+  <div class="nav-brand">
+    <span class="jeeves-logo">Jeeves</span>
+    <div class="nav-divider"></div>
+    <span class="nav-client">COGNITIVITY</span>
+  </div>
+  <div class="nav-links">
+    <a href="#sec-cuenta">Cuenta en EE.UU.</a>
+    <a href="#sec-control">Aprobaciones & Control</a>
+    <a href="#sec-respaldo">Respaldo</a>
+    <a href="#sec-calc">Condiciones</a>
+  </div>
+  <a href="#sec-cta" class="nav-cta">Próximos pasos →</a>
+</nav>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section id="sec-hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-label">Jeeves × Cognitivity · Propuesta octubre 2026</div>
+        <h1 class="hero-title">
+          De cero en Estados Unidos<br>
+          <em>a operar en dólares en una semana.</em>
+        </h1>
+        <p class="hero-subtitle">
+          Una cuenta en USD con coordenadas bancarias en EE.UU. a nombre de Cognitivity, sin necesidad de presencia formal allá. Recibe pagos de tus clientes, transfiere a proveedores con doble aprobación y concilia todo con IA — con una persona de Jeeves que te acompaña de forma directa. <strong style="color:#E5E7EB;">Bonito, barato y rápido.</strong>
+        </p>
+        <div class="hero-cta-group">
+          <a href="#sec-calc" class="btn-primary">Ver condiciones →</a>
+          <a href="#sec-cta" class="btn-ghost">Contactar a María ↓</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num">~1 semana</div>
+            <div class="lbl">Apertura de cuenta</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">US$0</div>
+            <div class="lbl">Apertura + plataforma · bonificado</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">2 firmas</div>
+            <div class="lbl">Carga y aprobación separadas</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">USD</div>
+            <div class="lbl">Siempre, sin importar el riel</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="jcard">
+          <div class="jcard-top">
+            <span class="jcard-logo">Jeeves</span>
+            <span class="jcard-elite">Visa</span>
+          </div>
+          <div class="jcard-mid">
+            <div class="jcard-chip"></div>
+            <span class="jcard-wave">〣</span>
+          </div>
+          <div class="jcard-number">4••• &nbsp;••••&nbsp; •••• &nbsp;2026</div>
+          <div class="jcard-bottom">
+            <div class="jcard-holder">
+              <div class="lbl">Card Holder</div>
+              <div class="val">Alejandra Zerpa</div>
+            </div>
+            <div class="jcard-exp">
+              <div class="lbl">Válida hasta</div>
+              <div class="val">10/29</div>
+            </div>
+            <div class="jcard-company">COGNITIVITY</div>
+          </div>
+        </div>
+        <p class="jcard-caption">Tarjeta corporativa <strong>Jeeves Visa</strong> · BIN americano · Para suscripciones y pagos puntuales en USD</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ① CUENTA EE.UU. ═══════════════════════════════ -->
+<section id="sec-cuenta" class="section dark">
+  <div class="container">
+    <div class="sec-header">
+      <div class="section-badge">① Cuenta en EE.UU. · Cobros y transferencias</div>
+      <h2>Tu cuenta en dólares en Estados Unidos,<br><em>sin tener presencia formal allá.</em></h2>
+      <p>Hoy Cognitivity está dando sus primeros pasos en EE.UU.: no tiene cuenta bancaria allá ni un proveedor que le dé confianza, agilidad y respuestas. Jeeves —fundada en Estados Unidos y pensada 100% para empresas— abre la cuenta por ti, con coordenadas bancarias a nombre de tu sociedad, y gestiona además los rieles locales para que tus clientes te paguen como les resulte más fácil.</p>
+    </div>
+
+    <!-- Flow -->
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot">📋</div>
+        <h4>Documentación</h4>
+        <p>Te enviamos el listado y el link; puedes completarlo tú o lo completamos por ti</p>
+        <div class="flow-time">15–20 min</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">🔎</div>
+        <h4>Doble validación</h4>
+        <p>Primer filtro de Jeeves y luego compliance del banco en EE.UU. que custodia los fondos</p>
+        <div class="flow-time">~1 semana</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">🏦</div>
+        <h4>Cuenta activa</h4>
+        <p>Coordenadas bancarias en USD a nombre de Cognitivity + rieles locales</p>
+        <div class="flow-time">Lista para operar</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">🎓</div>
+        <h4>Demo y configuración</h4>
+        <p>Asignamos roles y te acompañamos en tu primer pago o cobro</p>
+        <div class="flow-time">30 min · cuando quieras</div>
+      </div>
+    </div>
+
+    <div class="mt-4 grid-2">
+      <div class="feat-card" style="border-color: rgba(201,168,76,0.35);">
+        <div class="feat-icon">💵</div>
+        <h4>Recibe pagos de tus clientes <span style="font-size:0.65rem; font-weight:700; letter-spacing:0.06em; background:rgba(201,168,76,0.15); color:var(--gold); border:1px solid rgba(201,168,76,0.3); padding:0.2rem 0.55rem; border-radius:999px; vertical-align:middle; margin-left:0.4rem;">SIEMPRE EN USD</span></h4>
+        <p>Pocos depósitos al mes, pero de montos elevados: tus clientes pagan por el riel que les quede más cómodo y tú <strong style="color:#E5E7EB;">siempre ves dólares americanos</strong> en tu cuenta Jeeves. Si eligen un riel local, nosotros hacemos la conversión.</p>
+        <div class="rails">
+          <span class="rail"><strong>🇺🇸</strong>USD · ACH / Fedwire</span>
+          <span class="rail"><strong>🇦🇷</strong>ARS</span>
+          <span class="rail"><strong>🇨🇴</strong>COP</span>
+          <span class="rail"><strong>🇧🇷</strong>BRL</span>
+          <span class="rail"><strong>🇲🇽</strong>MXN</span>
+          <span class="rail"><strong>🇪🇺</strong>EUR · SEPA</span>
+          <span class="rail"><strong>◎</strong>Stablecoins</span>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔁</div>
+        <h4>Transferencias como método principal</h4>
+        <p>Paga a proveedores y aliados desde tu saldo en USD por ACH o Fedwire dentro de EE.UU., SWIFT (con comprobante MT103) al exterior o SEPA a cuentas en euros. Sin comisiones por operación ni cargos ocultos.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🪙</div>
+        <h4>Crypto friendly</h4>
+        <p>Si algún cliente prefiere pagarte en stablecoins, también te damos las instrucciones para recibirlo — y lo ves acreditado en dólares.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🛡️</div>
+        <h4>Fondos custodiados por un banco en EE.UU.</h4>
+        <p>Tu contrato y tu servicio son con Jeeves, pero los fondos están en un banco americano — lo verás detallado en los términos y condiciones de apertura.</p>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <div class="banner" style="background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.2);">
+        <div class="banner-icon">🚀</div>
+        <div class="banner-text" style="color: white;">
+          <h4 style="color: var(--gold);">¿Por qué importa para Cognitivity?</h4>
+          <p style="color: #9CA3AF;">Porque buscan en un proveedor lo mismo que ustedes les dan a sus clientes: <strong style="color: var(--gold);">rapidez, agilidad, respuesta y calidez</strong>. Una empresa que automatiza procesos con IA necesita una plataforma financiera que también lo haga — y un contacto directo por WhatsApp, mail o calendario, no un call center ni la burocracia de la banca tradicional.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="mt-4" style="overflow-x:auto;">
+      <h3 style="color: var(--white); margin-bottom: 1.5rem;">Jeeves vs. banca tradicional vs. operar sin cuenta en EE.UU.</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Criterio</th>
+            <th class="col-jeeves">Jeeves</th>
+            <th>Banca tradicional</th>
+            <th>Sin cuenta en EE.UU.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cuenta USD en EE.UU. sin presencia formal</td>
+            <td class="col-jeeves"><span class="check">✓</span> A nombre de tu sociedad</td>
+            <td><span class="neutral">~</span> Requisitos y tiempos largos</td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Tiempo de apertura</td>
+            <td class="col-jeeves text-gold font-bold">~1 semana</td>
+            <td>Semanas o meses</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Cobro a clientes en moneda local</td>
+            <td class="col-jeeves"><span class="check">✓</span> ARS, COP, BRL, MXN, EUR, stablecoins → USD</td>
+            <td><span class="neutral">~</span> Una moneda por cuenta</td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Doble aprobación de transferencias</td>
+            <td class="col-jeeves"><span class="check">✓</span> Carga + aprobación + aprobador de backup</td>
+            <td><span class="check">✓</span> Disponible</td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Conciliación automática con IA</td>
+            <td class="col-jeeves"><span class="check">✓</span> Comprobantes por WhatsApp</td>
+            <td><span class="cross">✗</span> Manual</td>
+            <td><span class="cross">✗</span> Manual</td>
+          </tr>
+          <tr>
+            <td>Tarjetas corporativas en USD</td>
+            <td class="col-jeeves"><span class="check">✓</span> Visa, BIN americano · 2% cashback (90 días)</td>
+            <td><span class="neutral">~</span> Trámite aparte</td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Costo de apertura y plataforma</td>
+            <td class="col-jeeves text-gold font-bold">US$0 · bonificado por referido</td>
+            <td>Mantenimiento + comisiones</td>
+            <td>Costos de intermediarios</td>
+          </tr>
+          <tr>
+            <td>Atención</td>
+            <td class="col-jeeves text-gold font-bold">Contacto directo · WhatsApp, mail y calendario</td>
+            <td>Sucursal / call center</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ② CONTROL ═══════════════════════════════ -->
+<section id="sec-control" class="section">
+  <div class="container">
+    <div class="sec-header">
+      <div class="section-badge light">② Aprobaciones, roles y conciliación</div>
+      <h2>Tú cargas, Cristian aprueba.<br><em>Igual que hoy, pero más simple.</em></h2>
+      <p>El mismo esquema que hoy usan con su banco en Argentina: administración carga los pagos y nada sale hasta que Cristian lo aprueba desde su propio perfil. Transparente, y sin depender de quién lleve la administración.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="feat-card-light">
+        <div class="feat-icon">✍️</div>
+        <h4>Doble aprobación de pagos</h4>
+        <p>Alejandra carga la transferencia; queda pendiente hasta que Cristian la autoriza. Además puedes definir un aprobador de backup para cuando él esté de vacaciones, para que la operación no se frene.</p>
+      </div>
+      <div class="feat-card-light">
+        <div class="feat-icon">👥</div>
+        <h4>Roles con accesos distintos</h4>
+        <p>No es lo mismo un CFO, un contador o alguien con una tarjeta asignada: cada usuario ve y hace solo lo que le corresponde, todo dentro de la misma plataforma.</p>
+      </div>
+      <div class="feat-card-light">
+        <div class="feat-icon">🤖</div>
+        <h4>Conciliación con IA</h4>
+        <p>Después de cada pago, la persona recibe un WhatsApp pidiendo la factura; saca una foto y el comprobante viaja a la plataforma. Al cierre de mes, todo está justificado — sin conciliar uno por uno.</p>
+      </div>
+      <div class="feat-card-light">
+        <div class="feat-icon">💳</div>
+        <h4>Tarjetas para pagos puntuales</h4>
+        <p>Visa con BIN americano: suscripciones, software y viajes en USD sin rechazos ni llamadas para autorizar. Virtuales ilimitadas sin costo y hasta 5 físicas sin costo. Y si más adelante lo necesitan, integración con ERP.</p>
+      </div>
+    </div>
+
+    <!-- Approval demo -->
+    <div class="mt-4" style="background: #0A0A0A; border-radius: 20px; padding: 2rem; border: 1px solid #222;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;">
+        <span style="font-size: 0.7rem; color: #6B7280; text-transform: uppercase; letter-spacing: 0.1em;">TRANSFERENCIA · EJEMPLO ILUSTRATIVO</span>
+        <span style="font-size: 0.7rem; color: #34D399; font-weight: 700;">● APROBADA</span>
+      </div>
+      <div style="font-size: 2.5rem; font-weight: 900; color: white; letter-spacing: -0.04em;">USD 8,000.00<span style="color: var(--gold); font-size: 1rem; font-weight: 700; margin-left: 0.5rem;">Pago a proveedor · ACH</span></div>
+      <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.3rem;">Desde la cuenta USD de Cognitivity · Comprobante adjunto · Conciliado</div>
+      <div class="approval">
+        <div class="approval-step">
+          <div class="who">Administración</div>
+          <div class="what">Alejandra carga el pago</div>
+          <div class="st" style="color: var(--gold);">① Cargado</div>
+        </div>
+        <div class="approval-step">
+          <div class="who">Aprobador</div>
+          <div class="what">Cristian aprueba desde su perfil</div>
+          <div class="st" style="color: var(--gold);">② Autorizado</div>
+        </div>
+        <div class="approval-step">
+          <div class="who">Jeeves</div>
+          <div class="what">Se ejecuta y se concilia con IA</div>
+          <div class="st" style="color: #34D399;">③ Enviado ✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ③ RESPALDO ═══════════════════════════════ -->
+<section id="sec-respaldo" class="section dark-alt">
+  <div class="container">
+    <div class="sec-header center">
+      <div class="section-badge">③ Quiénes nos respaldan</div>
+      <h2>Marcas de primer nivel<br><em>e inversionistas globales.</em></h2>
+      <p>Jeeves crece en Latinoamérica con el respaldo de algunos de los fondos más relevantes del mundo y la confianza de empresas líderes en la región.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="stat-block">
+        <div class="big">+USD 380M</div>
+        <div class="sm">Capital levantado</div>
+      </div>
+      <div class="stat-block">
+        <div class="big">100% B2B</div>
+        <div class="sm">Solo empresas, desde el primer día</div>
+      </div>
+      <div class="stat-block">
+        <div class="big">4 países</div>
+        <div class="sm">Oficinas en Brasil, Colombia, España y EE.UU. · Buenos Aires, próximamente</div>
+      </div>
+    </div>
+
+    <div class="logo-group">
+      <div class="logo-title">Empresas que confían en Jeeves</div>
+      <div class="logo-strip">
+        <span>BMW</span><span>Nubank</span><span>Kavak</span><span>Hotmart</span><span>H&amp;M</span><span>Burger King</span><span>Bitso</span><span>lululemon</span><span>PayU</span><span class="more">y más</span>
+      </div>
+    </div>
+    <div class="logo-group">
+      <div class="logo-title">Inversionistas globales</div>
+      <div class="logo-strip">
+        <span>Y Combinator</span><span>Andreessen Horowitz</span><span>Tencent</span><span>Silicon Valley Bank</span><span>GIC</span><span>CRV</span><span>Pollen Street</span><span>Atalaya</span><span class="more">y más</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ④ CONDICIONES ═══════════════════════════════ -->
+<section id="sec-calc" class="section" style="background: #F3F4F6;">
+  <div class="container">
+    <div class="sec-header center">
+      <div class="section-badge light">④ Condiciones y beneficios de activación</div>
+      <h2>Todo por escrito,<br><em>sin sorpresas.</em></h2>
+      <p>Por venir referidos por Francisco, bonificamos los costos de Jeeves: la idea es que nos prueben este trimestre.</p>
+    </div>
+
+    <div class="deadline">
+      <div class="dl-icon">⏰</div>
+      <div class="dl-items">
+        <div class="dl-item"><div class="dl-k">Apertura de la cuenta</div><div class="dl-v">Antes del 31 de octubre de 2026</div></div>
+        <div class="dl-item"><div class="dl-k">Activación</div><div class="dl-v">Hasta 10 días hábiles después de la apertura</div></div>
+        <div class="dl-item"><div class="dl-k">Cashback 2%</div><div class="dl-v">Durante los 90 días posteriores a la apertura</div></div>
+      </div>
+    </div>
+    <p class="dl-note">Para acceder a los beneficios, ambas condiciones deben cumplirse: cuenta abierta antes del 31 de octubre de 2026 y activada dentro de los 10 días hábiles siguientes.</p>
+
+    <div class="calc-wrapper">
+      <div class="calc-header">
+        <h3>💰 Plan de activación · Cognitivity × Jeeves</h3>
+        <span class="badge">Apertura antes del 31/10/2026</span>
+      </div>
+      <div class="calc-body">
+        <div class="calc-grid">
+          <!-- LEFT: beneficios -->
+          <div>
+            <div class="calc-section-title">🎁 Beneficios incluidos</div>
+            <div class="benefit">
+              <div class="b-icon">🔁</div>
+              <div><h4>Transferencias sin comisión</h4><p>Recibir y enviar en USD, sin comisiones por operación ni cargos ocultos.</p></div>
+            </div>
+            <div class="benefit">
+              <div class="b-icon">🤝</div>
+              <div><h4>Onboarding acompañado 1:1</h4><p>Te acompañamos personalmente en todo el alta.</p></div>
+            </div>
+            <div class="benefit">
+              <div class="b-icon">🏦</div>
+              <div><h4>Costo de apertura bonificado</h4><p><s>USD 250</s> <strong class="free">USD 0</strong></p></div>
+            </div>
+            <div class="benefit">
+              <div class="b-icon">🖥️</div>
+              <div><h4>Uso de plataforma bonificado</h4><p><s>USD 2.500/año</s> <strong class="free">USD 0</strong></p></div>
+            </div>
+            <div class="benefit">
+              <div class="b-icon">💳</div>
+              <div><h4>Tarjetas Visa</h4><p>Virtuales ilimitadas sin costo, compatibles con Apple Pay y Google Pay. Hasta 5 físicas sin costo; desde la 6ª, USD 15 c/u.</p></div>
+            </div>
+            <div class="benefit">
+              <div class="b-icon">💸</div>
+              <div><h4>2% de cashback sin tope</h4><p>Corre durante los 90 días posteriores a la apertura de la cuenta.</p></div>
+            </div>
+          </div>
+
+          <!-- RIGHT: condiciones + simulador -->
+          <div>
+            <div class="calc-section-title">✅ Condición de activación y cashback</div>
+            <p style="font-size: 0.85rem; color: #374151; margin-bottom: 1rem;">Mínimo <strong>USD 1.000 de gasto en tarjetas una vez dada de alta la cuenta</strong>, para activar los beneficios. Para ganar y mantener el 2% de cashback, el mínimo de USD 1.000 aplica cada mes. Edita los montos para simularlo.</p>
+
+            <div class="months">
+              <div class="month">
+                <label>Mes 1</label>
+                <div class="calc-input-wrap has-prefix"><span class="prefix">$</span><input type="number" id="m1" value="1000" step="100" min="0" class="editable" oninput="calcular()"></div>
+                <div class="m-st" id="s1">—</div>
+              </div>
+              <div class="month">
+                <label>Mes 2</label>
+                <div class="calc-input-wrap has-prefix"><span class="prefix">$</span><input type="number" id="m2" value="1000" step="100" min="0" class="editable" oninput="calcular()"></div>
+                <div class="m-st" id="s2">—</div>
+              </div>
+              <div class="month">
+                <label>Mes 3</label>
+                <div class="calc-input-wrap has-prefix"><span class="prefix">$</span><input type="number" id="m3" value="1000" step="100" min="0" class="editable" oninput="calcular()"></div>
+                <div class="m-st" id="s3">—</div>
+              </div>
+            </div>
+
+            <div class="calc-results">
+              <h4>Resumen · Cognitivity</h4>
+              <div class="result-row">
+                <span class="result-label">Activación (≥ USD 1.000 tras el alta)</span>
+                <span class="result-value" id="r_act">—</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Gasto en tarjetas del período</span>
+                <span class="result-value" id="r_gasto">—</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">🎁 Cashback 2% (meses que cumplen)</span>
+                <span class="result-value" id="r_cb" style="color: #34D399;">—</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Costos bonificados (apertura + plataforma año 1)</span>
+                <span class="result-value" style="color: #34D399;">USD 2.750</span>
+              </div>
+              <div class="result-row highlight">
+                <span class="result-label">🏆 Beneficio total estimado</span>
+                <span class="result-value" id="r_total">—</span>
+              </div>
+            </div>
+
+            <div class="calc-section-title" style="margin-top: 1.75rem;">📋 Para abrir la cuenta</div>
+            <ul class="checklist">
+              <li><span>1</span>Constancia fiscal de la sociedad (p. ej. inscripción en ARCA/AFIP)</li>
+              <li><span>2</span>Prueba de domicilio con no más de 90 días de emisión</li>
+              <li><span>3</span>Datos de la sociedad y de los usuarios (Alejandra y Cristian)</li>
+              <li><span>4</span>Volumen mensual estimado: solo para el alta interna, no es un compromiso</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; background: #F9F9F7; border: 1px solid #E5E7EB; border-radius: 12px; padding: 1.25rem;">
+          <p style="font-size: 0.75rem; color: #6B7280;">* Beneficios válidos para cuentas abiertas antes del 31 de octubre de 2026 y activadas dentro de los 10 días hábiles posteriores a su apertura. Activación sujeta a un gasto mínimo de USD 1.000 en tarjetas una vez dada de alta la cuenta. El 2% de cashback, sin tope, corre durante los 90 días posteriores a la apertura y se gana en cada mes en que el gasto en tarjetas alcance USD 1.000 o más. Las conversiones desde rieles locales a USD incluyen el tipo de cambio aplicable. Condiciones finales sujetas a la aprobación de la cuenta.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ECOSISTEMA ═══════════════════════════════ -->
+<section class="section dark">
+  <div class="container">
+    <div class="sec-header center">
+      <div class="section-badge">El ecosistema completo</div>
+      <h2>Todo conectado.<br><em>Un solo panel.</em></h2>
+      <p>Cobros, pagos, tarjetas y conciliación en un solo lugar, para que la administración de Cognitivity en EE.UU. arranque ordenada desde el día uno.</p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 3rem;">
+      <div class="feat-card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🏦</div>
+        <h4>Cuenta USD en EE.UU.</h4>
+        <p style="font-size: 0.82rem;">Coordenadas bancarias a nombre de tu sociedad para cobrar y pagar</p>
+      </div>
+      <div class="feat-card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🌎</div>
+        <h4>Rieles locales</h4>
+        <p style="font-size: 0.82rem;">ARS, COP, BRL, MXN, EUR y stablecoins, siempre acreditados en USD</p>
+      </div>
+      <div class="feat-card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">✍️</div>
+        <h4>Aprobaciones</h4>
+        <p style="font-size: 0.82rem;">Carga y aprobación separadas, con aprobador de backup</p>
+      </div>
+      <div class="feat-card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🤖</div>
+        <h4>Conciliación con IA</h4>
+        <p style="font-size: 0.82rem;">Comprobantes por WhatsApp, cierre de mes sin trabajo manual</p>
+      </div>
+      <div class="feat-card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">💳</div>
+        <h4>Tarjetas Visa</h4>
+        <p style="font-size: 0.82rem;">BIN americano, físicas y virtuales, con límites por usuario</p>
+      </div>
+      <div class="feat-card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🔗</div>
+        <h4>Integración ERP</h4>
+        <p style="font-size: 0.82rem;">Disponible para cuando la necesiten</p>
+      </div>
+    </div>
+
+    <!-- Big numbers -->
+    <div class="grid-4">
+      <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.04); border-radius: var(--radius); border: 1px solid var(--border);">
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--gold); letter-spacing: -0.04em;">15 min</div>
+        <div style="font-size: 0.78rem; color: #6B7280; margin-top: 0.3rem;">Para completar el onboarding</div>
+      </div>
+      <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.04); border-radius: var(--radius); border: 1px solid var(--border);">
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--gold); letter-spacing: -0.04em;">~1 sem.</div>
+        <div style="font-size: 0.78rem; color: #6B7280; margin-top: 0.3rem;">Cuenta abierta</div>
+      </div>
+      <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.04); border-radius: var(--radius); border: 1px solid var(--border);">
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--gold); letter-spacing: -0.04em;">US$0</div>
+        <div style="font-size: 0.78rem; color: #6B7280; margin-top: 0.3rem;">Apertura + plataforma</div>
+      </div>
+      <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.04); border-radius: var(--radius); border: 1px solid var(--border);">
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--gold); letter-spacing: -0.04em;">7</div>
+        <div style="font-size: 0.78rem; color: #6B7280; margin-top: 0.3rem;">Rieles para cobrar, todo en USD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CTA ═══════════════════════════════ -->
+<section id="sec-cta">
+  <div class="container">
+    <div class="cta-card">
+      <div class="section-badge" style="background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.3);">Próximos pasos</div>
+      <h2>Alejandra, este es el resumen para Cristian.</h2>
+      <p>Como conversamos: lo revisan juntos y nos dan su respuesta. Si avanzan, te envío el link con la documentación, abrimos la cuenta en alrededor de una semana y luego hacemos una demo para configurar roles y acompañarte en el primer pago o cobro.</p>
+
+      <div class="contact-card">
+        <div class="contact-avatar">MS</div>
+        <div class="contact-info">
+          <div class="name">María Sabatella Sanguinetti</div>
+          <div class="role">Account Executive · Jeeves</div>
+          <div class="email">maria.sanguinetti@tryjeeves.com</div>
+        </div>
+      </div>
+      <p style="font-size: 0.78rem; color: #9CA3AF; margin-top: 1rem; position: relative; z-index: 1;">Junto a <strong style="color: var(--gold);">Maggie</strong> · referido de Francisco</p>
+
+      <div class="cta-buttons">
+        <a href="mailto:maria.sanguinetti@tryjeeves.com?subject=Cognitivity%20%C3%97%20Jeeves%20%C2%B7%20Apertura%20de%20cuenta&body=Hola%20Mar%C3%ADa%2C%20soy%20Alejandra%20de%20Cognitivity.%20Revisamos%20la%20propuesta%20con%20Cristian%20y%20queremos%20avanzar%20con%20la%20apertura%20de%20la%20cuenta.%20%C2%BFNos%20env%C3%ADas%20el%20link%20con%20la%20documentaci%C3%B3n%3F"
+           class="btn-primary">✓ Quiero avanzar con la apertura</a>
+      </div>
+      <p style="font-size: 0.75rem; color: #6B7280; margin-top: 1rem; position: relative; z-index: 1;">Se abrirá tu cliente de correo con un mensaje listo para María · maria.sanguinetti@tryjeeves.com</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <p>
+    <strong>Jeeves</strong> · tryjeeves.com · Propuesta Cuenta USD en EE.UU. + Transferencias · Cognitivity<br>
+    <span style="margin-top: 0.3rem; display: inline-block;">Elaborado por María Sabatella Sanguinetti · Jeeves</span>
+  </p>
+</footer>
+
+<script>
+  const fmt = n => 'USD ' + new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(n);
+  function calcular() {
+    const v = [1,2,3].map(i => Math.max(0, parseFloat(document.getElementById('m'+i).value) || 0));
+    const activa = v[0] >= 1000;
+    let cb = 0;
+    v.forEach((x, i) => {
+      const ok = activa && x >= 1000;
+      if (ok) cb += x * 0.02;
+      const el = document.getElementById('s'+(i+1));
+      el.textContent = ok ? '✓ 2% · ' + fmt(x*0.02) : (!activa ? '✗ Sin activación' : '✗ Faltan ' + fmt(1000 - x));
+      el.style.color = ok ? '#15803D' : '#B45309';
+    });
+    const a = document.getElementById('r_act');
+    a.textContent = activa ? 'Activada ✓' : 'Faltan ' + fmt(1000 - v[0]);
+    a.style.color = activa ? '#34D399' : '#F59E0B';
+    document.getElementById('r_gasto').textContent = fmt(v[0]+v[1]+v[2]);
+    document.getElementById('r_cb').textContent = fmt(cb);
+    document.getElementById('r_total').textContent = activa ? fmt(2750 + cb) : '—';
+  }
+  calcular();
+</script>
+
+</body>
+</html>
